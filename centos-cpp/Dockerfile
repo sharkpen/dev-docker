@@ -34,6 +34,7 @@ RUN cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 RUN sed -i "s/robbyrussell/bira/" ~/.zshrc
 RUN sudo usermod -s /bin/zsh ${USER_NAME} 
 
+
 RUN sudo yum install -y \
     python3.9 \
     python39-devel \
@@ -56,16 +57,21 @@ RUN git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.v
 RUN vim -c PluginInstall -c q -c q
 RUN cd /home/${USER_NAME}/.vim/bundle/YouCompleteMe && python3 install.py 
 
-
 RUN sudo yum install -y \
     epel-release \
-    java-1.8.0-openjdk-devel 
+    java-1.8.0-openjdk-devel \
+    git-clang-format
+
+RUN echo 3 | sudo alternatives --config python
+RUN echo 1 | sudo alternatives --config python3
+
 
 RUN sudo yum groupinstall "Development Tools" -y
 
 RUN cd /home/${USER_NAME}/source && wget https://github.com/bazelbuild/bazel/releases/download/6.1.0/bazel-6.1.0-installer-linux-x86_64.sh && sudo sh bazel-6.1.0-installer-linux-x86_64.sh
 
 RUN cd /home/${USER_NAME}/workspace/example && bazel build //:hello
+
 
 
 ## 运行一些命令以准备容器
